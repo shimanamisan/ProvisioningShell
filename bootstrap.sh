@@ -1,17 +1,24 @@
-# ホームディレクトリにファイルが存在していたら終了
-if test -f /home/vagrant/bootstrapped ; then
+#!/bin/bash
+
+# シェル変数を定義
+IS_BOOT_DIR=/home/vagrant/bootstrapped
+# 変数を読み取り専用にし、定数として扱う
+readonly IS_BOOT_DIR
+
+# testコマンドを使った書き方
+# if test -f /home/vagrant/bootstrapped ; then
+if [ -f BOOT_DIR ] ; then
 
 echo "何もしない"
 # rm -rf /home/vagrant/bootstrapped
 
 else
+touch ~/script_logs
 
-echo "Change Root User"
-# rootユーザーに切り替え
-sudo -i
+echo "Upgrade"
+dnf -y upgrade
 
 echo "Install Package"
-dnf -y upgrade
 dnf -y install vim
 dnf -y install git
 dnf -y install wget
