@@ -1,12 +1,34 @@
 #!/bin/bash
-
-pwd
-whoami
-
+# path: "ProvisioningShell/bootstrap.sh"
 # シェル変数を定義
 IS_BOOT_DIR=/home/vagrant/bootstrapped
 # 変数を読み取り専用にし、定数として扱う
 readonly IS_BOOT_DIR
+
+
+# 初回に起動時にCentOSを最新の状態にしておく
+function os_update()
+{
+   if [ -f /home/vagrant/os_update ]; then
+      echo "[INFO] CentOSは最新です"
+   else
+
+      dnf -y upgrade
+
+      # 処理の終了コードを取得
+      RESULT=$?
+      # 結果のチェック
+      if [ $RESULT -eq 0 ]; then
+         echo "[INFO] 最新のCentOSに更新されました。vagrant reloadコマンドを実行して再起動してください。"
+         date > /home/vagrant/os_update
+         exit 0;
+      else
+         error "[ERROR] os_updateでエラーが発生 異常終了"
+         exit 0;
+      fi
+   fi
+}
+
 
 # testコマンドを使った書き方
 # if test -f /home/vagrant/bootstrapped ; then
@@ -26,15 +48,12 @@ function additional_package()
       echo "[INFO] additional_package 既に設定済みです"
       return 0
    fi
-   
-   dnf -y upgrade
+
    dnf -y install vim
    dnf -y install git
    dnf -y install wget
    dnf -y install unzip
 
-   whoami
-   pwd
    # 処理の終了コードを取得
    RESULT=$?
    # 結果のチェック
@@ -286,6 +305,9 @@ function error()
     exit 1
 }
 
+
+# 関数を実行する
+os_update
 additional_package
 apache_install_and_setting_do
 php_install_and_setting_do
