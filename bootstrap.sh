@@ -1,10 +1,4 @@
 #!/bin/bash
-# path: "ProvisioningShell/bootstrap.sh"
-# シェル変数を定義
-IS_BOOT_DIR=/home/vagrant/bootstrapped
-# 変数を読み取り専用にし、定数として扱う
-readonly IS_BOOT_DIR
-
 
 # 初回に起動時にCentOSを最新の状態にしておく
 function os_update()
@@ -24,7 +18,7 @@ function os_update()
          exit 0;
       else
          error "[ERROR] os_updateでエラーが発生 異常終了"
-         exit 0;
+         exit 1;
       fi
    fi
 }
@@ -32,7 +26,7 @@ function os_update()
 
 # testコマンドを使った書き方
 # if test -f /home/vagrant/bootstrapped ; then
-if [ -f IS_BOOT_DIR ]; then
+if [ -f /home/vagrant/bootstrapped ]; then
 
 echo "[INFO] 全ての設定が完了しています。"
 
@@ -58,7 +52,7 @@ function additional_package()
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] additional_packageの処理終了"
       date > /home/vagrant/additional_package_done
       return 0
    else
@@ -86,7 +80,7 @@ function apache_install_and_setting_do()
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] apache_install_and_setting_doの処理終了"
       date > /home/vagrant/apache_install_and_setting_done
       return 0
    else
@@ -151,7 +145,7 @@ EOF
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] php_install_and_setting_doの処理終了"
       date > /home/vagrant/php_install_and_setting_done
       return 0
    else
@@ -242,7 +236,7 @@ EOF
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] mysql_install_and_setting_doの処理終了"
       date > /home/vagrant/mysql_install_and_setting_done
       return 0
    else
@@ -262,7 +256,7 @@ function confirm_service_status()
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] confirm_service_statusの処理終了"
       return 0
    else
       error "[ERROR] confirm_service_statusでエラーが発生 異常終了"
@@ -288,7 +282,7 @@ EOF
    RESULT=$?
    # 結果のチェック
    if [ $RESULT -eq 0 ]; then
-      echo "[INFO] 処理終了"
+      echo "[INFO] creating_phpinfo_fileの処理終了"
       date > /home/vagrant/creating_phpinfo_file_done
       return 0
    else
