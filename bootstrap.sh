@@ -214,7 +214,7 @@ EOF
       # 指定した文字列の先頭をコメントアウトする
       sed -i -e "s/.*blowfish_secret.*/\/\/&/g" /usr/share/phpMyAdmin/config.inc.php
       # マッチした文字列の次の行に指定した文字列を追加
-      sed -i -e "/.*blowfish_secret.*/a \$cfg['blowfish_secret'] = 'UsaosAn1987';" /usr/share/phpMyAdmin/config.inc.php
+      sed -i -e "/.*blowfish_secret.*/a \$cfg['blowfish_secret'] = '任意のパスワードを設定';" /usr/share/phpMyAdmin/config.inc.php
 fi
 
 
@@ -226,7 +226,7 @@ fi
       touch /home/vagrant/file_bundled_sql
       cat >> /home/vagrant/file_bundled_sql << "EOF"
 use mysql;
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'UsaosAn1987';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'phpMyAdminに設定したパスワードと合わせる';
 EOF
    fi
 
