@@ -22,7 +22,7 @@ vagrant init bento/centos-8.3
 
 ## Vagrant ファイルを編集する
 
-- シェルスクリプトを Vagrant ファイルと同じ位置に配置します
+- `bootstrap.sh` を Vagrant ファイルと同じ位置に配置します
 - visual studio code などで Vagrant ファイルを開きます
 
 ```ini
@@ -56,6 +56,18 @@ config.vm.network "private_network", ip: "192.168.33.20"
 
 - [メモリーや CPU 等のリソース割当の設定](https://www.vagrantup.com/docs/providers/virtualbox/configuration#vboxmanage-customizations)
 
+## シェルスクリプト内の phpmyadmin と MySQL の root ユーザーのパスワードを修正する
+
+- phpmyadmin のコンフィグファイルで設定したものと、MySQL で設定するパスワードは**同じものを設定する**
+
+```sh
+sed -i -e "/.*blowfish_secret.*/a \$cfg['blowfish_secret'] = '任意のパスワードを設定';" /usr/share/phpMyAdmin/config.inc.php
+
+### 中略 ###
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'phpMyAdminに設定したパスワードと合わせる';
+```
+
 ## Vagrant を起動する
 
 ```sh
@@ -67,3 +79,6 @@ vagrant up
 ```sh
 vagrant provision
 ```
+
+- ブラウザのアドレスバーに仮想マシンの IP アドレスを入力して、**phpinfo**の画面が表示されれば正常に完了しています
+- `仮想マシンのIPアドレス/phpmyadmin`で、phpmyadmin のログイン画面に遷移し、ユーザー名：root、password：シェルスクリプト内で設定したパスワード、でログイン出来るか確認して下さい
